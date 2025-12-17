@@ -335,10 +335,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Updated view count to:', viewCount);
   }
 
-  // Update view count when page loads (with delay to ensure DOM is ready)
-  setTimeout(() => {
-    updateViewCount();
-  }, 100);
+  // Update view count immediately when page loads
+  updateViewCount();
 
   // Expose for debugging (optional)
   window.__enterSite = enterSite;
