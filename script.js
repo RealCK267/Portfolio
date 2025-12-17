@@ -309,7 +309,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Real view counter using localStorage
   function updateViewCount() {
     const viewCountEl = document.getElementById('view-count');
-    if (!viewCountEl) return;
+    console.log('View count element:', viewCountEl);
+    
+    if (!viewCountEl) {
+      console.error('View count element not found!');
+      return;
+    }
 
     // Get current view count from localStorage
     let viewCount = localStorage.getItem('portfolio-views');
@@ -327,10 +332,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Display the count
     viewCountEl.textContent = viewCount.toLocaleString();
+    console.log('Updated view count to:', viewCount);
   }
 
-  // Update view count when page loads
-  updateViewCount();
+  // Update view count when page loads (with delay to ensure DOM is ready)
+  setTimeout(() => {
+    updateViewCount();
+  }, 100);
 
   // Expose for debugging (optional)
   window.__enterSite = enterSite;
