@@ -10,6 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const timeEl = document.getElementById('time');
   const volumeEl = document.getElementById('volume');
   const profile = document.getElementById('profile');
+  const bgVideo = document.getElementById('bg-video');
+
+  // Ensure background video plays properly
+  if (bgVideo) {
+    bgVideo.addEventListener('loadeddata', () => {
+      console.log('Background video loaded successfully');
+      bgVideo.play().catch(err => console.log('Video autoplay blocked:', err));
+    });
+    
+    bgVideo.addEventListener('error', (e) => {
+      console.warn('Background video failed to load:', e);
+      // Video failed, stars will be more visible as fallback
+    });
+
+    // Force video to load
+    bgVideo.load();
+  }
 
   // Utility: format time
   function formatTime(sec) {

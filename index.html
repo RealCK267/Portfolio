@@ -4,10 +4,33 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>King CK</title>
+  
+  <!-- Open Graph / Link Preview Meta Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="RealCk - Developer Portfolio" />
+  <meta property="og:description" content="Interactive portfolio with typewriter animations, starfield background, and music player. A upcoming developer using C++" />
+  <meta property="og:image" content="https://realck267.github.io/Portfolio/assets/profile.png" />
+  <meta property="og:url" content="https://realck267.github.io/Portfolio" />
+  <meta property="og:site_name" content="RealCk Portfolio" />
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="RealCk - Developer Portfolio" />
+  <meta name="twitter:description" content="Interactive portfolio with typewriter animations, starfield background, and music player" />
+  <meta name="twitter:image" content="https://realck267.github.io/Portfolio/assets/profile.png" />
+  
+  <!-- Additional Meta Tags -->
+  <meta name="description" content="My Cool Ass fucking portfolio" />
+  <meta name="keywords" content="developer, portfolio, C++  />
+  <meta name="author" content="RealCk" />
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="overlay-open">
-  <video id="bg-video" src="assets/background.mp4" autoplay loop muted playsinline></video>
+  <video id="bg-video" autoplay loop muted playsinline preload="auto">
+    <source src="assets/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
   <canvas id="stars"></canvas>
 
   <!-- Entry overlay: click to enter and start song -->
