@@ -306,6 +306,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Real view counter using localStorage
+  function updateViewCount() {
+    const viewCountEl = document.getElementById('view-count');
+    if (!viewCountEl) return;
+
+    // Get current view count from localStorage
+    let viewCount = localStorage.getItem('portfolio-views');
+    if (!viewCount) {
+      viewCount = 0;
+    } else {
+      viewCount = parseInt(viewCount);
+    }
+
+    // Increment view count
+    viewCount++;
+    
+    // Save back to localStorage
+    localStorage.setItem('portfolio-views', viewCount);
+    
+    // Display the count
+    viewCountEl.textContent = viewCount.toLocaleString();
+  }
+
+  // Update view count when page loads
+  updateViewCount();
+
   // Expose for debugging (optional)
   window.__enterSite = enterSite;
   console.log('page script initialized');
