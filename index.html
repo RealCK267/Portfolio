@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>King CK</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="overlay-open">
+  <video id="bg-video" src="assets/background.mp4" autoplay loop muted playsinline></video>
+  <canvas id="stars"></canvas>
+
+  <!-- Entry overlay: click to enter and start song -->
+  <div id="enter-overlay" aria-hidden="false">
+    <button id="enter-btn" type="button">Click 2 Enter</button>
+    <div class="hint">(Just click atp kiddo)</div>
+  </div>
+
+  <main class="stage">
+    <div class="profile" id="profile">
+      <div class="avatar">
+        <img src="assets/profile.png" alt="Profile Picture" />
+      </div>
+
+      <div class="info">
+        <div class="name-row">
+          <h1 class="name">RealCk</h1>
+          <div class="badges" aria-hidden>
+            <div class="badge"><img class="badge-icon" src="assets/owner.png" alt="Owner"><span>Owner</span></div>
+             <div class="badge"><img class="badge-icon" src="assets/hitler.png" alt="Jew"><span>Jew</span></div>
+            <div class="badge"><img class="badge-icon" src="assets/discord.png" alt="Discord"><span>.gg/valora</span></div>
+            <div class="badge"><img class="badge-icon" src="assets/developer.png" alt="Developer"><span>Developer</span></div>
+            <div class="badge"><img class="badge-icon" src="assets/verified.gif" alt="Verified"><span>Verified</span></div>
+          </div>
+        </div>
+
+        <p class="tagline">A Upcoming Developer using C++</p>
+
+        <div class="meta-row">
+          <div class="views">👁️ 182,310</div>
+          <div class="links-placeholder">
+            <span class="link-ghost">Discord</span>
+            <span class="link-ghost">Website</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="audio-visual" id="player-ui">
+        <button id="play-btn" class="play">►</button>
+        <div class="bar">
+          <div class="progress" id="progress" style="width:0%"></div>
+        </div>
+        <div class="time" id="time">0:00 / 0:00</div>
+        <input id="volume" type="range" min="0" max="1" step="0.01" value="0.6">
+      </div>
+    </div>
+
+    <!-- audio element (no autoplay) -->
+    <audio id="bg-audio" src="assets/background_music.mp3" preload="metadata"></audio>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
