@@ -306,7 +306,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Real view counter using localStorage
+  // Generate unique visitor ID based on browser fingerprint
+  function generateVisitorId() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'top';
+    ctx.font = '14px Arial';
+    ctx.fillText('Visitor fingerprint', 2, 2);
+    
+    const fingerprint = [
+      navigator.userAgent,
+      navigator.language,
+      screen.width + 'x' + screen.height,
+      new Date().getTimezoneOffset(),
+      canvas.toDataURL()
+    ].join('|');
+    
+    // Simple hash function
+    let hash = 0;
+    for (let i = 0; i < fingerprint.length; i++) {
+      const char = fingerprint.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString();
+  }
+
+  // Real view counter with unique visitor tracking
   function updateViewCount() {
     const viewCountEl = document.getElementById('view-count');
     console.log('View count element:', viewCountEl);
@@ -316,23 +342,41 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Get current view count from localStorage
+    // Generate unique visitor ID
+    const visitorId = generateVisitorId();
+    
+    // Get list of visitors who have already been counted
+    let countedVisitors = localStorage.getItem('portfolio-counted-visitors');
+    if (!countedVisitors) {
+      countedVisitors = [];
+    } else {
+      countedVisitors = JSON.parse(countedVisitors);
+    }
+    
+    // Get current view count
     let viewCount = localStorage.getItem('portfolio-views');
     if (!viewCount) {
       viewCount = 0;
     } else {
       viewCount = parseInt(viewCount);
     }
-
-    // Increment view count
-    viewCount++;
     
-    // Save back to localStorage
-    localStorage.setItem('portfolio-views', viewCount);
+    // Only increment if this visitor hasn't been counted before
+    if (!countedVisitors.includes(visitorId)) {
+      viewCount++;
+      countedVisitors.push(visitorId);
+      
+      // Save updated data
+      localStorage.setItem('portfolio-views', viewCount);
+      localStorage.setItem('portfolio-counted-visitors', JSON.stringify(countedVisitors));
+      
+      console.log('New unique visitor! Updated view count to:', viewCount);
+    } else {
+      console.log('Returning visitor, view count stays at:', viewCount);
+    }
     
     // Display the count
     viewCountEl.textContent = viewCount.toLocaleString();
-    console.log('Updated view count to:', viewCount);
   }
 
   // Update view count immediately when page loads
