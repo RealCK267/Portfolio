@@ -14,18 +14,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Ensure background video plays properly
   if (bgVideo) {
+    // Set video to higher priority
+    bgVideo.style.zIndex = '2';
+    
+    // Multiple event listeners to ensure video loads
     bgVideo.addEventListener('loadeddata', () => {
       console.log('Background video loaded successfully');
+      bgVideo.style.opacity = '1';
       bgVideo.play().catch(err => console.log('Video autoplay blocked:', err));
+    });
+    
+    bgVideo.addEventListener('canplay', () => {
+      console.log('Video can start playing');
+      bgVideo.play().catch(err => console.log('Video play failed:', err));
+    });
+    
+    bgVideo.addEventListener('loadedmetadata', () => {
+      console.log('Video metadata loaded');
+      bgVideo.play().catch(err => console.log('Video play failed:', err));
     });
     
     bgVideo.addEventListener('error', (e) => {
       console.warn('Background video failed to load:', e);
-      // Video failed, stars will be more visible as fallback
+      // If video fails, make stars more visible
+      const starsCanvas = document.getElementById('stars');
+      if (starsCanvas) {
+        starsCanvas.style.opacity = '0.8';
+      }
     });
 
-    // Force video to load
+    // Force video to load immediately
     bgVideo.load();
+    
+    // Try to play video after a short delay
+    setTimeout(() => {
+      if (bgVideo.paused) {
+        bgVideo.play().catch(err => console.log('Delayed video play failed:', err));
+      }
+    }, 500);
   }
 
   // Utility: format time
