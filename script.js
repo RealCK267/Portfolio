@@ -334,18 +334,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Generate unique visitor ID based on browser fingerprint
   function generateVisitorId() {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    ctx.textBaseline = 'top';
-    ctx.font = '14px Arial';
-    ctx.fillText('Visitor fingerprint', 2, 2);
+    // First check if we have a permanent visitor ID stored
+    let permanentId = localStorage.getItem('permanent-visitor-id');
+    if (permanentId) {
+      return permanentId;
+    }
     
+    // Create a more stable fingerprint
     const fingerprint = [
       navigator.userAgent,
       navigator.language,
       screen.width + 'x' + screen.height,
       new Date().getTimezoneOffset(),
-      canvas.toDataURL()
+      navigator.platform
     ].join('|');
     
     // Simple hash function
@@ -353,9 +354,15 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < fingerprint.length; i++) {
       const char = fingerprint.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32-bit integer
+      hash = hash & hash;
     }
-    return Math.abs(hash).toString();
+    
+    const visitorId = Math.abs(hash).toString();
+    
+    // Store permanently so this browser always has same ID
+    localStorage.setItem('permanent-visitor-id', visitorId);
+    
+    return visitorId;
   }
 
   // Real view counter with unique visitor tracking
@@ -368,16 +375,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Generate unique visitor ID
-    const visitorId = generateVisitorId();
-    
-    // Get list of visitors who have already been counted
-    let countedVisitors = localStorage.getItem('portfolio-counted-visitors');
-    if (!countedVisitors) {
-      countedVisitors = [];
-    } else {
-      countedVisitors = JSON.parse(countedVisitors);
-    }
+    // Check if this browser has already been counted
+    const hasBeenCounted = localStorage.getItem('portfolio-visitor-counted');
     
     // Get current view count
     let viewCount = localStorage.getItem('portfolio-views');
@@ -387,18 +386,17 @@ document.addEventListener('DOMContentLoaded', () => {
       viewCount = parseInt(viewCount);
     }
     
-    // Only increment if this visitor hasn't been counted before
-    if (!countedVisitors.includes(visitorId)) {
+    // Only increment if this browser hasn't been counted before
+    if (!hasBeenCounted) {
       viewCount++;
-      countedVisitors.push(visitorId);
       
-      // Save updated data
+      // Mark this browser as counted
+      localStorage.setItem('portfolio-visitor-counted', 'true');
       localStorage.setItem('portfolio-views', viewCount);
-      localStorage.setItem('portfolio-counted-visitors', JSON.stringify(countedVisitors));
       
-      console.log('New unique visitor! Updated view count to:', viewCount);
+      console.log('🆕 New visitor! Updated view count to:', viewCount);
     } else {
-      console.log('Returning visitor, view count stays at:', viewCount);
+      console.log('🔄 Returning visitor, view count stays at:', viewCount);
     }
     
     // Display the count
